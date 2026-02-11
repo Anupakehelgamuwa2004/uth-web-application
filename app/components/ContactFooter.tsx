@@ -3,7 +3,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Mail, Send } from "lucide-react";
-import BackgroundGrid from "./BackgroundGrid";
 
 export default function ContactFooter() {
   const ref = useRef(null);
@@ -34,24 +33,9 @@ export default function ContactFooter() {
     <footer
       id="contact"
       ref={ref}
-      className="relative py-32 px-6 sm:px-8 lg:px-12 min-h-screen flex items-center overflow-hidden"
+      className="relative py-32 px-6 sm:px-8 lg:px-12 min-h-screen flex items-center overflow-hidden bg-transparent"
+      style={{ backgroundColor: 'transparent' }}
     >
-      {/* Animated Background Grid with Shooting Stars */}
-      <BackgroundGrid />
-      
-      {/* Mesh Gradient Overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `
-            radial-gradient(at 0% 100%, rgba(88, 28, 135, 0.2) 0%, transparent 50%),
-            radial-gradient(at 100% 0%, rgba(30, 58, 138, 0.2) 0%, transparent 50%),
-            radial-gradient(at 100% 100%, rgba(88, 28, 135, 0.15) 0%, transparent 50%),
-            radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.15) 0%, transparent 50%)
-          `,
-        }}
-      />
-
       <div className="max-w-7xl mx-auto w-full relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 50 }}

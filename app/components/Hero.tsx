@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Globe from "./Globe";
+import ScrollIndicator from "./ScrollIndicator";
 
 export default function Hero() {
   return (
@@ -10,7 +11,7 @@ export default function Hero() {
       className="relative h-screen flex items-center overflow-hidden bg-zinc-950"
     >
       {/* Globe - offset to the right */}
-      <div className="absolute inset-0 flex items-center justify-end">
+      <div className="absolute inset-0 flex items-center justify-end pt-24">
         <motion.div
           className="w-full h-full max-w-5xl max-h-5xl"
           initial={{ opacity: 0, scale: 0.8 }}
@@ -67,6 +68,9 @@ export default function Hero() {
           </motion.h1>
         </motion.div>
       </motion.div>
+
+      {/* Scroll Indicator */}
+      <ScrollIndicator />
     </section>
   );
 }

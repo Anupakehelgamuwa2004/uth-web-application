@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import ParticlesBackground from "./ParticlesBackground";
 
 const services = [
   {
@@ -41,14 +42,12 @@ export default function BentoGrid() {
   return (
     <section
       id="services"
-      className="relative py-32 px-6 sm:px-8 lg:px-12 min-h-screen flex items-center"
-      style={{
-        backgroundImage: `linear-gradient(to right, rgba(128, 128, 128, 0.07) 1px, transparent 1px),
-          linear-gradient(to bottom, rgba(128, 128, 128, 0.07) 1px, transparent 1px)`,
-        backgroundSize: "24px 24px",
-      }}
+      className="relative py-32 px-6 sm:px-8 lg:px-12 min-h-screen flex items-center overflow-hidden bg-zinc-950"
     >
-      <div className="max-w-7xl mx-auto w-full">
+      {/* Particles Background */}
+      <ParticlesBackground />
+      
+      <div className="max-w-7xl mx-auto w-full relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -90,20 +89,10 @@ export default function BentoGrid() {
               onMouseMove={(e) => handleMouseMove(e, index)}
               onMouseLeave={() => setHoveredCard(null)}
             >
-              {/* Dark grid pattern base */}
-              <div
-                className="absolute inset-0 opacity-30"
-                style={{
-                  backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)`,
-                  backgroundSize: "20px 20px",
-                }}
-              />
-
-              {/* Spotlight effect - reveals brighter grid */}
+              {/* Spotlight effect - reveals glow */}
               {hoveredCard === index && (
                 <motion.div
-                  className="absolute pointer-events-none"
+                  className="absolute pointer-events-none rounded-full"
                   style={{
                     width: "400px",
                     height: "400px",
@@ -115,23 +104,11 @@ export default function BentoGrid() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {/* Radial gradient mask */}
+                  {/* Radial gradient glow */}
                   <div
-                    className="absolute inset-0"
+                    className="absolute inset-0 rounded-full blur-3xl"
                     style={{
                       background: "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)",
-                      mixBlendMode: "overlay",
-                    }}
-                  />
-                  {/* Revealed grid */}
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.2) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(255, 255, 255, 0.2) 1px, transparent 1px)`,
-                      backgroundSize: "20px 20px",
-                      maskImage: "radial-gradient(circle 200px at center, black, transparent)",
-                      WebkitMaskImage: "radial-gradient(circle 200px at center, black, transparent)",
                     }}
                   />
                 </motion.div>
