@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const projects = [
   { id: 1, title: "Project Alpha" },
@@ -10,6 +10,99 @@ const projects = [
   { id: 4, title: "Project Delta" },
   { id: 5, title: "Project Epsilon" },
 ];
+
+interface ProjectCardProps {
+  project: { id: number; title: string };
+  index: number;
+}
+
+function ProjectCard({ project, index }: ProjectCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Parallax effect - image moves slower than scroll
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{
+        type: "spring",
+        damping: 20,
+        stiffness: 100,
+        delay: index * 0.1,
+      }}
+      className="flex-shrink-0 w-[400px] md:w-[500px] aspect-[4/3] rounded-2xl overflow-hidden group cursor-pointer"
+      style={{
+        border: "1px solid rgba(255, 255, 255, 0.1)",
+      }}
+      whileHover={{ scale: 1.05, y: -10 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="w-full h-full relative overflow-hidden">
+        {/* Parallax Image Background */}
+        <motion.div
+          className="absolute inset-0 w-full h-[120%]"
+          style={{ 
+            y: imageY,
+            background: "linear-gradient(135deg, rgba(39, 39, 42, 0.9) 0%, rgba(24, 24, 27, 0.9) 100%)",
+          }}
+        >
+          {/* Grid pattern that becomes visible on hover */}
+          <div
+            className="absolute inset-0 transition-opacity duration-500"
+            style={{
+              backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)`,
+              backgroundSize: "30px 30px",
+              opacity: isHovered ? 0.5 : 0.2,
+            }}
+          />
+          
+          {/* Grayscale overlay that reduces on hover */}
+          <motion.div
+            className="absolute inset-0 bg-zinc-900/50"
+            animate={{
+              opacity: isHovered ? 0 : 0.7,
+            }}
+            transition={{ duration: 0.3 }}
+          />
+        </motion.div>
+
+        {/* Gradient overlay */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
+          animate={{
+            opacity: isHovered ? 1 : 0.5,
+          }}
+          transition={{ duration: 0.3 }}
+        />
+
+        {/* Project Title */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <motion.h3
+            className="text-2xl md:text-3xl font-bold text-zinc-100 relative z-10 px-6 text-center"
+            animate={{
+              scale: isHovered ? 1.1 : 1,
+              opacity: isHovered ? 1 : 0.7,
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            {project.title}
+          </motion.h3>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function WorkSection() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -55,32 +148,7 @@ export default function WorkSection() {
           className="flex gap-6 px-6 sm:px-8 lg:px-12"
         >
           {projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{
-                type: "spring",
-                damping: 20,
-                stiffness: 100,
-                delay: index * 0.1,
-              }}
-              className="flex-shrink-0 w-[400px] md:w-[500px] aspect-[4/3] rounded-2xl overflow-hidden group"
-              style={{
-                background: "rgba(24, 24, 27, 0.5)",
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-              }}
-              whileHover={{ scale: 1.05, y: -10 }}
-            >
-              <div className="w-full h-full bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 flex items-center justify-center relative">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <h3 className="text-2xl font-bold text-zinc-100 relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {project.title}
-                </h3>
-              </div>
-            </motion.div>
+            <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </motion.div>
       </div>

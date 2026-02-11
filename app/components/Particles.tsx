@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import TextRotator from "./TextRotator";
 
 interface Particle {
   x: number;
@@ -14,7 +15,7 @@ interface Particle {
 export default function Particles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -114,9 +115,14 @@ export default function Particles() {
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        <h2 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-zinc-100 mb-4">
-          We build digital empires.
-        </h2>
+        <TextRotator
+          phrases={[
+            "We build digital empires.",
+            "We craft digital experiences.",
+            "We engineer future growth.",
+          ]}
+          className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-zinc-100"
+        />
       </motion.div>
     </section>
   );

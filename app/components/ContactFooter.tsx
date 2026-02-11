@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Mail, Send } from "lucide-react";
+import BackgroundGrid from "./BackgroundGrid";
 
 export default function ContactFooter() {
   const ref = useRef(null);
@@ -12,6 +13,7 @@ export default function ContactFooter() {
     email: "",
     message: "",
   });
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,16 +36,18 @@ export default function ContactFooter() {
       ref={ref}
       className="relative py-32 px-6 sm:px-8 lg:px-12 min-h-screen flex items-center overflow-hidden"
     >
-      {/* Mesh Gradient Background */}
+      {/* Animated Background Grid with Shooting Stars */}
+      <BackgroundGrid />
+      
+      {/* Mesh Gradient Overlay */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 pointer-events-none"
         style={{
           background: `
-            radial-gradient(at 0% 100%, rgba(88, 28, 135, 0.3) 0%, transparent 50%),
-            radial-gradient(at 100% 0%, rgba(30, 58, 138, 0.3) 0%, transparent 50%),
-            radial-gradient(at 100% 100%, rgba(88, 28, 135, 0.2) 0%, transparent 50%),
-            radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.2) 0%, transparent 50%),
-            #000000
+            radial-gradient(at 0% 100%, rgba(88, 28, 135, 0.2) 0%, transparent 50%),
+            radial-gradient(at 100% 0%, rgba(30, 58, 138, 0.2) 0%, transparent 50%),
+            radial-gradient(at 100% 100%, rgba(88, 28, 135, 0.15) 0%, transparent 50%),
+            radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.15) 0%, transparent 50%)
           `,
         }}
       />
@@ -107,44 +111,92 @@ export default function ContactFooter() {
               }}
               className="space-y-6"
             >
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-zinc-500 mb-2 font-mono uppercase tracking-wider">
                   Name
                 </label>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder=">"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full bg-transparent border-0 border-b-2 border-zinc-800 px-0 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors font-mono text-lg"
-                />
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder=">"
+                    value={formData.name}
+                    onChange={handleChange}
+                    onFocus={() => setFocusedField("name")}
+                    onBlur={() => setFocusedField(null)}
+                    className="w-full bg-transparent border-0 border-b-2 border-zinc-800 px-0 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none transition-colors font-mono text-lg"
+                  />
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-zinc-400"
+                    initial={{ scaleX: 0 }}
+                    animate={{
+                      scaleX: focusedField === "name" ? 1 : 0,
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: "easeOut",
+                    }}
+                    style={{ originX: 0.5 }}
+                  />
+                </div>
               </div>
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-zinc-500 mb-2 font-mono uppercase tracking-wider">
                   Email
                 </label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder=">"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full bg-transparent border-0 border-b-2 border-zinc-800 px-0 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors font-mono text-lg"
-                />
+                <div className="relative">
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder=">"
+                    value={formData.email}
+                    onChange={handleChange}
+                    onFocus={() => setFocusedField("email")}
+                    onBlur={() => setFocusedField(null)}
+                    className="w-full bg-transparent border-0 border-b-2 border-zinc-800 px-0 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none transition-colors font-mono text-lg"
+                  />
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-zinc-400"
+                    initial={{ scaleX: 0 }}
+                    animate={{
+                      scaleX: focusedField === "email" ? 1 : 0,
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: "easeOut",
+                    }}
+                    style={{ originX: 0.5 }}
+                  />
+                </div>
               </div>
-              <div>
+              <div className="relative">
                 <label className="block text-sm text-zinc-500 mb-2 font-mono uppercase tracking-wider">
                   Message
                 </label>
-                <textarea
-                  name="message"
-                  placeholder=">"
-                  value={formData.message}
-                  onChange={handleChange}
-                  rows={6}
-                  className="w-full bg-transparent border-0 border-b-2 border-zinc-800 px-0 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors resize-none font-mono text-lg"
-                />
+                <div className="relative">
+                  <textarea
+                    name="message"
+                    placeholder=">"
+                    value={formData.message}
+                    onChange={handleChange}
+                    onFocus={() => setFocusedField("message")}
+                    onBlur={() => setFocusedField(null)}
+                    rows={6}
+                    className="w-full bg-transparent border-0 border-b-2 border-zinc-800 px-0 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none transition-colors resize-none font-mono text-lg"
+                  />
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-zinc-400"
+                    initial={{ scaleX: 0 }}
+                    animate={{
+                      scaleX: focusedField === "message" ? 1 : 0,
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: "easeOut",
+                    }}
+                    style={{ originX: 0.5 }}
+                  />
+                </div>
               </div>
               <motion.button
                 type="submit"

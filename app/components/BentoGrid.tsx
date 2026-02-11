@@ -73,51 +73,78 @@ export default function BentoGrid() {
           {services.map((service, index) => (
             <motion.div
               key={service.title}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{
                 type: "spring",
-                damping: 20,
-                stiffness: 100,
+                damping: 15,
+                stiffness: 150,
                 delay: index * 0.1,
               }}
-              className="group relative rounded-2xl p-8 sm:p-12 overflow-hidden"
+              className="group relative rounded-2xl p-8 sm:p-12 overflow-hidden bg-zinc-900"
               style={{
-                background: "rgba(24, 24, 27, 0.5)",
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
+                border: "1px solid rgba(255, 255, 255, 0.05)",
               }}
               whileHover={{ scale: 1.02, y: -5 }}
-              transition={{ type: "spring", damping: 20 }}
               onMouseMove={(e) => handleMouseMove(e, index)}
               onMouseLeave={() => setHoveredCard(null)}
             >
-              {/* Spotlight effect */}
+              {/* Dark grid pattern base */}
+              <div
+                className="absolute inset-0 opacity-30"
+                style={{
+                  backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)`,
+                  backgroundSize: "20px 20px",
+                }}
+              />
+
+              {/* Spotlight effect - reveals brighter grid */}
               {hoveredCard === index && (
                 <motion.div
-                  className="absolute pointer-events-none rounded-full opacity-20 blur-3xl"
+                  className="absolute pointer-events-none"
                   style={{
-                    width: "300px",
-                    height: "300px",
-                    background: "radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%)",
-                    left: mousePosition.x - 150,
-                    top: mousePosition.y - 150,
+                    width: "400px",
+                    height: "400px",
+                    left: mousePosition.x - 200,
+                    top: mousePosition.y - 200,
                   }}
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.2 }}
+                  animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                />
+                  transition={{ duration: 0.2 }}
+                >
+                  {/* Radial gradient mask */}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background: "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)",
+                      mixBlendMode: "overlay",
+                    }}
+                  />
+                  {/* Revealed grid */}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.2) 1px, transparent 1px)`,
+                      backgroundSize: "20px 20px",
+                      maskImage: "radial-gradient(circle 200px at center, black, transparent)",
+                      WebkitMaskImage: "radial-gradient(circle 200px at center, black, transparent)",
+                    }}
+                  />
+                </motion.div>
               )}
 
               {/* Border glow on hover */}
-              <div className="absolute inset-0 rounded-2xl border border-white/10 group-hover:border-white/30 transition-all duration-300" />
+              <div className="absolute inset-0 rounded-2xl border border-white/5 group-hover:border-white/20 transition-all duration-300" />
 
               <div className="relative z-10">
                 <h3 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-100 mb-4">
                   {service.title}
                 </h3>
-                <p className="text-lg text-zinc-500">{service.description}</p>
+                <p className="text-lg text-zinc-400">{service.description}</p>
               </div>
             </motion.div>
           ))}

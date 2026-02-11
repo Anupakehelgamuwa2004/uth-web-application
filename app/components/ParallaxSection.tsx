@@ -2,9 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
-
-const text = "Inspired by Innovation";
-const words = text.split(" ");
+import TextRotator from "./TextRotator";
 
 export default function ParallaxSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -25,18 +23,6 @@ export default function ParallaxSection() {
     }));
     setStars(newStars);
   }, []);
-
-  // Create opacity transforms for each word - reveal as user scrolls
-  const wordOpacities = words.map((_, index) => {
-    const start = index * 0.15;
-    const end = start + 0.3;
-    return useTransform(
-      scrollYProgress,
-      [Math.max(0, start - 0.1), Math.min(1, end)],
-      [0.2, 1],
-      { clamp: true }
-    );
-  });
 
   return (
     <section
@@ -74,21 +60,14 @@ export default function ParallaxSection() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
       >
-        <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 lg:gap-8">
-          {words.map((word, index) => (
-            <motion.span
-              key={index}
-              style={{ opacity: wordOpacities[index] }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight text-zinc-100"
-              transition={{
-                duration: 0.5,
-                ease: "easeOut",
-              }}
-            >
-              {word}
-            </motion.span>
-          ))}
-        </div>
+        <TextRotator
+          phrases={[
+            "Inspired by Innovation.",
+            "Driven by Intelligence.",
+            "Fueled by Passion.",
+          ]}
+          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight text-zinc-100"
+        />
       </motion.div>
     </section>
   );
