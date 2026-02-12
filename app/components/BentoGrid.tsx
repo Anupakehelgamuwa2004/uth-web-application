@@ -72,13 +72,14 @@ export default function BentoGrid() {
 
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          style={{ gridAutoRows: "minmax(0, 1fr)" }}
           initial="hidden"
         >
           {services.map((service, index) => (
             <Link
               key={service.title}
               href={service.href || "#"}
-              className="block"
+              className="block h-full"
             >
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -90,7 +91,7 @@ export default function BentoGrid() {
                   stiffness: 150,
                   delay: index * 0.1,
                 }}
-                className="group relative rounded-2xl p-8 sm:p-12 overflow-hidden bg-zinc-900 cursor-pointer"
+                className="group relative rounded-2xl p-8 sm:p-12 overflow-hidden bg-zinc-900 cursor-pointer h-full flex flex-col"
                 style={{
                   border: "1px solid rgba(255, 255, 255, 0.05)",
                 }}
@@ -126,7 +127,7 @@ export default function BentoGrid() {
               {/* Border glow on hover */}
               <div className="absolute inset-0 rounded-2xl border border-white/5 group-hover:border-white/20 transition-all duration-300" />
 
-              <div className="relative z-10">
+              <div className="relative z-10 flex-1 flex flex-col">
                 <h3 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-100 mb-4">
                   {service.title}
                 </h3>

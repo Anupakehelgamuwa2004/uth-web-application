@@ -2,19 +2,21 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 // ORDER: Services BEFORE Work
 const navItems = [
-  { name: "Home", href: "#home" },
-  { name: "Services", href: "#services" },
-  { name: "Work", href: "#work" },
-  { name: "Team", href: "#team" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "/" },
+  { name: "Services", href: "/#services" },
+  { name: "Work", href: "/#work" },
+  { name: "Team", href: "/#team" },
+  { name: "Contact", href: "/#contact" },
 ];
 
 export default function FloatingNav() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,10 +28,19 @@ export default function FloatingNav() {
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    
+    // If we're on the home page, use smooth scroll
+    if (pathname === "/" && href.includes("#")) {
+      const hash = href.split("#")[1];
+      const element = document.querySelector(`#${hash}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
     }
+    
+    // Otherwise, navigate to the page
+    window.location.href = href;
   };
 
   return (
@@ -56,8 +67,11 @@ export default function FloatingNav() {
       >
         {/* LOGO */}
         <motion.a
-          href="#home"
-          onClick={(e) => handleClick(e, "#home")}
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = "/";
+          }}
           className="font-bold text-xl text-white tracking-tighter shrink-0 z-50"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}

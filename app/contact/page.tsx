@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import FloatingNav from "../components/FloatingNav";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function ContactPage() {
@@ -17,9 +17,47 @@ export default function ContactPage() {
     console.log("Form submitted:", formData);
   };
 
+  const navItems = [
+    { name: "Home", href: "/" },
+    { name: "Services", href: "/#services" },
+    { name: "Work", href: "/#work" },
+    { name: "Team", href: "/#team" },
+    { name: "Contact", href: "/#contact" },
+  ];
+
   return (
-    <div className="min-h-screen bg-black text-white">
-      <FloatingNav />
+    <div className="min-h-screen bg-black text-white relative">
+      {/* Static Navbar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/50 border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="flex items-center justify-between h-20">
+            <Link href="/" className="text-2xl font-bold tracking-tight text-white">
+              UTH
+            </Link>
+            <div className="hidden md:flex items-center gap-8">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-sm font-medium text-zinc-300 hover:text-white transition-colors"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* FORCE VISIBLE BACK BUTTON */}
+      <div className="fixed top-24 left-5 z-[9999] pointer-events-auto">
+        <Link 
+          href="/#services"
+          className="flex items-center gap-2 px-4 py-2 bg-black/80 border border-white/20 rounded-full text-white text-sm hover:bg-white/20 transition-all backdrop-blur-xl shadow-2xl"
+        >
+          <span>←</span> Back
+        </Link>
+      </div>
       
       <motion.main
         initial={{ opacity: 0, y: 20 }}

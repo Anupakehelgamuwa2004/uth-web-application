@@ -17,7 +17,17 @@ export default function PostsPage() {
   const cards = [0, 1, 2];
 
   return (
-    <div className="min-h-screen bg-black bg-grid-white/[0.02] text-white">
+    <div className="min-h-screen bg-black bg-grid-white/[0.02] text-white relative">
+      {/* FORCE VISIBLE BACK BUTTON */}
+      <div className="fixed top-24 left-5 z-[9999] pointer-events-auto">
+        <Link 
+          href="/#services"
+          className="flex items-center gap-2 px-4 py-2 bg-black/80 border border-white/20 rounded-full text-white text-sm hover:bg-white/20 transition-all backdrop-blur-xl shadow-2xl"
+        >
+          <span>←</span> Back
+        </Link>
+      </div>
+      
       <FloatingNav />
       
       <motion.main
