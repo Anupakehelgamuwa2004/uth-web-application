@@ -13,6 +13,7 @@ export default function ParallaxSection() {
 
   return (
     <section
+      id="innovation"
       ref={ref}
       className="relative h-screen flex items-center justify-center overflow-hidden bg-transparent"
       style={{ backgroundColor: 'transparent' }}

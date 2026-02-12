@@ -2,24 +2,29 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import Link from "next/link";
 import ParticlesBackground from "./ParticlesBackground";
 
 const services = [
   {
-    title: "Web Development",
-    description: "Cutting-edge web solutions that scale",
+    title: "Software Solutions",
+    description: "Custom apps, websites, and automation infrastructure.",
+    href: "/software",
   },
   {
     title: "Marketing Posts",
-    description: "Content that converts and engages",
+    description: "High-conversion static visuals and graphic design.",
+    href: "/posts",
   },
   {
-    title: "Cinematic Video",
-    description: "Visual storytelling that captivates",
+    title: "Marketing Videos",
+    description: "Motion graphics and video editing that stops the scroll.",
+    href: "/videos",
   },
   {
     title: "Social Media Management",
-    description: "Strategic presence across platforms",
+    description: "Community growth, analytics, and full-stack account handling.",
+    href: "/management",
   },
 ];
 
@@ -70,25 +75,29 @@ export default function BentoGrid() {
           initial="hidden"
         >
           {services.map((service, index) => (
-            <motion.div
+            <Link
               key={service.title}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{
-                type: "spring",
-                damping: 15,
-                stiffness: 150,
-                delay: index * 0.1,
-              }}
-              className="group relative rounded-2xl p-8 sm:p-12 overflow-hidden bg-zinc-900"
-              style={{
-                border: "1px solid rgba(255, 255, 255, 0.05)",
-              }}
-              whileHover={{ scale: 1.02, y: -5 }}
-              onMouseMove={(e) => handleMouseMove(e, index)}
-              onMouseLeave={() => setHoveredCard(null)}
+              href={service.href || "#"}
+              className="block"
             >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{
+                  type: "spring",
+                  damping: 15,
+                  stiffness: 150,
+                  delay: index * 0.1,
+                }}
+                className="group relative rounded-2xl p-8 sm:p-12 overflow-hidden bg-zinc-900 cursor-pointer"
+                style={{
+                  border: "1px solid rgba(255, 255, 255, 0.05)",
+                }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                onMouseMove={(e) => handleMouseMove(e, index)}
+                onMouseLeave={() => setHoveredCard(null)}
+              >
               {/* Spotlight effect - reveals glow */}
               {hoveredCard === index && (
                 <motion.div
@@ -124,8 +133,18 @@ export default function BentoGrid() {
                 <p className="text-lg text-zinc-400">{service.description}</p>
               </div>
             </motion.div>
+            </Link>
           ))}
         </motion.div>
+      </div>
+
+      {/* Cinematic Deep Fade Overlay */}
+      <div className="absolute bottom-0 left-0 w-full pointer-events-none z-20">
+        {/* Layer 1: The Long, Subtle Mist (Start fading early) */}
+        <div className="absolute bottom-0 left-0 w-full h-96 bg-gradient-to-b from-transparent via-black/20 to-black" />
+        
+        {/* Layer 2: The Solid Base (Ensure total black at the seam) */}
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-black" />
       </div>
     </section>
   );

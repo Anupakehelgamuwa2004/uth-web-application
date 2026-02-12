@@ -117,9 +117,10 @@ export default function WorkSection() {
     <section
       id="work"
       ref={containerRef}
-      className="relative py-32 min-h-screen flex flex-col justify-center overflow-hidden"
+      className="relative py-32 min-h-screen flex flex-col justify-center overflow-hidden bg-black z-20"
       style={{
-        background: "radial-gradient(circle at top, rgba(39, 39, 42, 0.2) 0%, rgba(9, 9, 11, 0.8) 50%, #000000 100%)",
+        backgroundColor: '#000000',
+        zIndex: 20,
       }}
     >
       <div className="max-w-7xl mx-auto w-full px-6 sm:px-8 lg:px-12 mb-16">
