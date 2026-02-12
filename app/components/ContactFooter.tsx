@@ -47,10 +47,10 @@ export default function ContactFooter() {
             stiffness: 100,
           }}
         >
-          <h2 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-zinc-100 mb-4">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-zinc-100 mb-4">
             Get in Touch
           </h2>
-          <p className="text-xl text-zinc-500 mb-16">
+          <p className="text-lg sm:text-xl text-zinc-500 mb-8 sm:mb-12 md:mb-16">
             Let's build something extraordinary together
           </p>
 

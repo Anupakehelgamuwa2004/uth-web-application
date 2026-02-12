@@ -91,7 +91,7 @@ export default function BentoGrid() {
                   stiffness: 150,
                   delay: index * 0.1,
                 }}
-                className="group relative rounded-2xl p-8 sm:p-12 overflow-hidden bg-zinc-900 cursor-pointer h-full flex flex-col"
+                className="group relative rounded-2xl p-6 sm:p-8 md:p-12 overflow-hidden bg-zinc-900 cursor-pointer h-full flex flex-col"
                 style={{
                   border: "1px solid rgba(255, 255, 255, 0.05)",
                 }}
@@ -128,10 +128,10 @@ export default function BentoGrid() {
               <div className="absolute inset-0 rounded-2xl border border-white/5 group-hover:border-white/20 transition-all duration-300" />
 
               <div className="relative z-10 flex-1 flex flex-col">
-                <h3 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-100 mb-4">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-zinc-100 mb-3 sm:mb-4">
                   {service.title}
                 </h3>
-                <p className="text-lg text-zinc-400">{service.description}</p>
+                <p className="text-base sm:text-lg text-zinc-400">{service.description}</p>
               </div>
             </motion.div>
             </Link>

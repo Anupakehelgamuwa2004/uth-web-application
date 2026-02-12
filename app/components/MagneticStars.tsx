@@ -18,8 +18,10 @@ interface MagneticStarsProps {
 
 export default function MagneticStars({ 
   className = "", 
-  starCount = 150 
+  starCount 
 }: MagneticStarsProps) {
+  // Reduce star count on mobile for better performance
+  const effectiveStarCount = starCount || (typeof window !== "undefined" && window.innerWidth < 768 ? 75 : 150);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
   const animationFrameRef = useRef<number | undefined>(undefined);
@@ -43,7 +45,8 @@ export default function MagneticStars({
 
     const initializeStars = () => {
       const stars: Star[] = [];
-      for (let i = 0; i < starCount; i++) {
+      const count = typeof window !== "undefined" && window.innerWidth < 768 ? 75 : (starCount || 150);
+      for (let i = 0; i < count; i++) {
         stars.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
@@ -57,7 +60,16 @@ export default function MagneticStars({
     };
 
     resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
+    
+    // Throttled resize handler
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        resizeCanvas();
+      }, 150);
+    };
+    window.addEventListener("resize", handleResize, { passive: true });
 
     // Mouse tracking - track mouse position relative to canvas
     const handleMouseMove = (e: MouseEvent) => {
@@ -166,14 +178,14 @@ export default function MagneticStars({
     draw();
 
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [starCount, isMouseActive]);
+  }, [effectiveStarCount, isMouseActive]);
 
   return (
     <canvas

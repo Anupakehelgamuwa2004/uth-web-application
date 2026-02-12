@@ -28,10 +28,20 @@ export default function ParticlesBackground() {
     };
 
     resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
+    
+    // Throttled resize handler
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        resizeCanvas();
+      }, 150);
+    };
+    window.addEventListener("resize", handleResize, { passive: true });
 
-    // Create particles
-    const particleCount = 80;
+    // Reduce particle count on mobile for better performance
+    const isMobile = window.innerWidth < 768;
+    const particleCount = isMobile ? 40 : 80;
     const particles: Particle[] = [];
 
     for (let i = 0; i < particleCount; i++) {
@@ -93,7 +103,7 @@ export default function ParticlesBackground() {
     draw();
 
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("resize", handleResize);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }

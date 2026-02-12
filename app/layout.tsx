@@ -11,6 +11,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "UTH - We build digital empires",
   description: "UTH Agency - Digital excellence through innovation",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+  },
 };
 
 export default function RootLayout({

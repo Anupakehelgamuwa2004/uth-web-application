@@ -28,15 +28,17 @@ export default function Globe() {
         globe.destroy();
       }
       
+      // Reduce quality on mobile for better performance
+      const isMobile = window.innerWidth < 768;
       globe = createGlobe(canvasRef.current, {
-        devicePixelRatio: 2,
-        width: width * 2,
-        height: height * 2,
+        devicePixelRatio: isMobile ? 1 : 2,
+        width: width * (isMobile ? 1 : 2),
+        height: height * (isMobile ? 1 : 2),
       phi: 0,
       theta: 0,
       dark: 1,
       diffuse: 1.2,
-      mapSamples: 20000,
+      mapSamples: isMobile ? 10000 : 20000,
       mapBrightness: 4,
       baseColor: [0.9, 0.9, 0.9], // White/grey base
       markerColor: [1, 1, 1], // White markers
@@ -60,11 +62,15 @@ export default function Globe() {
     // Initialize on mount
     initGlobe();
     
-    // Handle resize
+    // Throttled resize handler for better performance
+    let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
-      initGlobe();
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        initGlobe();
+      }, 200);
     };
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
       if (globe) {
@@ -75,7 +81,7 @@ export default function Globe() {
   }, []);
 
   return (
-    <div className="relative w-full h-full flex items-center justify-end pr-8 md:pr-16 lg:pr-24">
+    <div className="relative w-full h-full flex items-center justify-end pr-4 sm:pr-8 md:pr-16 lg:pr-24">
       <canvas
         ref={canvasRef}
         className="w-full h-full"

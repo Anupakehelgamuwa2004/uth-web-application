@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 interface Particle {
   x: number;
@@ -32,8 +32,6 @@ export default function NeuralNetwork({
   const animationFrameRef = useRef<number | undefined>(undefined);
   const rotationYRef = useRef(0);
   const rotationXRef = useRef(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -78,32 +76,19 @@ export default function NeuralNetwork({
     };
 
     resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
+    
+    // Throttled resize handler for better performance
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        resizeCanvas();
+      }, 150);
+    };
+    window.addEventListener("resize", handleResize, { passive: true });
 
     // Initialize particles
     particlesRef.current = initializeParticles();
-
-    // Mouse tracking for interaction
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseRef.current = {
-        x: (e.clientX - rect.left - rect.width / 2) / rect.width,
-        y: (e.clientY - rect.top - rect.height / 2) / rect.height,
-      };
-    };
-
-    const handleMouseEnter = () => {
-      setIsHovered(true);
-    };
-
-    const handleMouseLeave = () => {
-      setIsHovered(false);
-      mouseRef.current = { x: 0, y: 0 };
-    };
-
-    canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("mouseenter", handleMouseEnter);
-    canvas.addEventListener("mouseleave", handleMouseLeave);
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -113,12 +98,11 @@ export default function NeuralNetwork({
       const centerY = canvas.height / 2;
       const fov = 400; // Field of view for perspective
 
-      // Update rotation (faster when hovered)
-      const rotationSpeed = isHovered ? 0.01 : 0.005;
-      rotationYRef.current += rotationSpeed;
+      // Smooth auto-rotation - constant speed
+      rotationYRef.current += 0.005;
       
-      // Subtle X-axis tilt based on mouse position
-      rotationXRef.current = mouseRef.current.y * 0.3;
+      // Subtle auto-rotation on X-axis for organic movement
+      rotationXRef.current = Math.sin(rotationYRef.current * 0.3) * 0.2;
 
       // Rotate particles around Y and X axes
       const cosY = Math.cos(rotationYRef.current);
@@ -229,20 +213,17 @@ export default function NeuralNetwork({
     draw();
 
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      canvas.removeEventListener("mouseenter", handleMouseEnter);
-      canvas.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("resize", handleResize);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [particleCount, connectionDistance, radius, isHovered]);
+  }, [particleCount, connectionDistance, radius]);
 
   return (
     <canvas
       ref={canvasRef}
-      className={`absolute inset-0 w-full h-full pointer-events-auto ${className}`}
+      className={`absolute inset-0 w-full h-full pointer-events-none ${className}`}
       style={{ backgroundColor: "transparent" }}
     />
   );
